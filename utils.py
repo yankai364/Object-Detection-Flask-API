@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import os
 
 
 def boxes_iou(box1, box2):
@@ -164,15 +165,24 @@ def load_class_names(namesfile):
 
 def print_objects(boxes, class_names):    
     print('Objects Found and Confidence Level:\n')
+    objects_count = {}
+    objects_confidence = []
     for i in range(len(boxes)):
         box = boxes[i]
         if len(box) >= 7 and class_names:
             cls_conf = box[5]
             cls_id = box[6]
             print('%i. %s: %f' % (i + 1, class_names[cls_id], cls_conf))
+            if class_names[cls_id] in objects_count:
+                objects_count[class_names[cls_id]] += 1
+            else:
+                objects_count[class_names[cls_id]] = 1
+            objects_confidence.append({class_names[cls_id]: round(float(cls_conf), 6)})
+
+    return objects_count, objects_confidence
 
             
-def plot_boxes(img, boxes, class_names, plot_labels, color = None):
+def plot_boxes(img, boxes, class_names, plots_dir, filename, plot_labels = True, color = None):
     
     # Define a tensor used to set the colors of the bounding boxes
     colors = torch.FloatTensor([[1,0,1],[0,0,1],[0,1,1],[0,1,0],[1,1,0],[1,0,0]])
@@ -257,4 +267,4 @@ def plot_boxes(img, boxes, class_names, plot_labels, color = None):
             a.text(x1 + lxc, y1 - lyc, conf_tx, fontsize = 24, color = 'k',
                    bbox = dict(facecolor = rgb, edgecolor = rgb, alpha = 0.8))        
         
-    plt.show()
+    plt.savefig(os.path.join(plots_dir, filename + '.jpg'))
