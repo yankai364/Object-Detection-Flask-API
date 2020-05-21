@@ -5,7 +5,7 @@ from utils import *
 from darknet import Darknet
 
 
-def process(uploads_dir, plots_dir, filename):
+def process(uploads_dir, output_dir, filename):
 
     # Set the location and name of the cfg file
     cfg_file = './cfg/yolov3.cfg'
@@ -59,6 +59,6 @@ def process(uploads_dir, plots_dir, filename):
     objects_count, objects_confidence = print_objects(boxes, class_names)
 
     # Plot the image with bounding boxes and corresponding object class labels
-    plot_boxes(original_image, boxes, class_names, plots_dir, filename)
+    plot_boxes(original_image, boxes, class_names, output_dir, filename)
 
     return objects_count, objects_confidence

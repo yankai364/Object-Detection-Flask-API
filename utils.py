@@ -182,7 +182,7 @@ def print_objects(boxes, class_names):
     return objects_count, objects_confidence
 
             
-def plot_boxes(img, boxes, class_names, plots_dir, filename, plot_labels = True, color = None):
+def plot_boxes(img, boxes, class_names, output_dir, filename, plot_labels = True, color = None):
     
     # Define a tensor used to set the colors of the bounding boxes
     colors = torch.FloatTensor([[1,0,1],[0,0,1],[0,1,1],[0,1,0],[1,1,0],[1,0,0]])
@@ -257,7 +257,7 @@ def plot_boxes(img, boxes, class_names, plots_dir, filename, plot_labels = True,
         if plot_labels:
             
             # Create a string with the object class name and the corresponding object class probability
-            conf_tx = class_names[cls_id] + ': {:.1f}'.format(cls_conf)
+            conf_tx = class_names[cls_id] + ': {0}%'.format(int(cls_conf * 100))
             
             # Define x and y offsets for the labels
             lxc = (img.shape[1] * 0.266) / 100
@@ -265,6 +265,7 @@ def plot_boxes(img, boxes, class_names, plots_dir, filename, plot_labels = True,
             
             # Draw the labels on top of the image
             a.text(x1 + lxc, y1 - lyc, conf_tx, fontsize = 24, color = 'k',
-                   bbox = dict(facecolor = rgb, edgecolor = rgb, alpha = 0.8))        
-        
-    plt.savefig(os.path.join(plots_dir, filename + '.jpg'))
+                   bbox = dict(facecolor = rgb, edgecolor = rgb, alpha = 0.8))
+
+    plt.axis('off')
+    plt.savefig(os.path.join(output_dir, filename + '.jpg'), bbox_inches='tight', pad_inches = 0)

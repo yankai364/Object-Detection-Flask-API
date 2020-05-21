@@ -17,5 +17,5 @@ _mailinglist
 docs/_build/
 .vscode
 *.weights
-instance/plots/*
+instance/output/*
 instance/uploads/*
